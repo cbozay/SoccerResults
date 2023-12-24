@@ -1,0 +1,74 @@
+<div class="d-flex">
+  <div>
+    <p-table
+      styleClass="p-datatable-striped"
+      [value]="teams"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-center"><h2>Puan Durumu</h2></div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="border">
+          <th>Takım Adı</th>
+          <th>Puan</th>
+          <th>Oynanan Maç</th>
+          <th>Galibiyet</th>
+          <th>Beraberlik</th>
+          <th>Mağlubiyet</th>
+          <th>Averaj</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-team let-index="rowIndex">
+        <tr
+          [ngClass]="{
+            'bg-danger': isLowProbability(team, index),
+            'text-white': isLowProbability(team, index)
+          }"
+        >
+          <td>{{ team.name }}</td>
+          <td>{{ team.points }}</td>
+          <td>{{ team.matchesPlayed }}</td>
+          <td>{{ team.wins }}</td>
+          <td>{{ team.draws }}</td>
+          <td>{{ team.losses }}</td>
+          <td>{{ team.goalDifference }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <button (click)="simulateMatches()">Maçları Oyna</button>
+  </div>
+
+  <app-match-results></app-match-results>
+
+  <div *ngIf="currentWeekIndex > 3">
+    <p-table
+      styleClass="p-datatable-striped"
+      [value]="championshipProbabilities"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-center">
+          <h2>Şampiyonluk Olasılıkları</h2>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="border bg-light">
+          <th>Takım Adı</th>
+          <th class="probabilities">Şampiyonluk Olasılığı</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-teamProbability>
+        <tr>
+          <td>{{ teamProbability.team.name }}</td>
+          <td class="probabilities">{{ teamProbability.probability }}%</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

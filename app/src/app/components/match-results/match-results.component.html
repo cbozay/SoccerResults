@@ -1,0 +1,27 @@
+<p-table
+  *ngIf="week"
+  styleClass="p-datatable-striped"
+  [value]="matchResults"
+  [paginator]="true"
+  [rows]="5"
+  [rowsPerPageOptions]="[5, 10, 20]"
+>
+  <ng-template pTemplate="caption">
+    <div class="d-flex justify-content-center">
+      <h2>Maç Sonuçları</h2>
+    </div>
+    <div class="d-flex justify-content-center pt-3">
+      <h3>STS {{ week }}. Hafta Maç Sonuçları</h3>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header"> </ng-template>
+  <ng-template pTemplate="body" let-matchResult>
+    <tr>
+      <td>{{ matchResult.home.name }}</td>
+      <td class="text-center">
+        {{ matchResult.home.score }}-{{ matchResult.away.score }}
+      </td>
+      <td class="away">{{ matchResult.away.name }}</td>
+    </tr>
+  </ng-template>
+</p-table>
