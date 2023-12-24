@@ -44,6 +44,10 @@
 
   <app-match-results></app-match-results>
 
+  <!-- <app-championship-probabilities
+    *ngIf="currentWeekIndex > 3"
+  ></app-championship-probabilities> -->
+
   <div *ngIf="currentWeekIndex > 3">
     <p-table
       styleClass="p-datatable-striped"
@@ -53,8 +57,8 @@
       [rowsPerPageOptions]="[5, 10, 20]"
     >
       <ng-template pTemplate="caption">
-        <div class="d-flex justify-content-center">
-          <h2>Şampiyonluk Olasılıkları</h2>
+        <div class="d-flex justify-content-center mb-1">
+          <h3>{{ currentWeekIndex }}. Hafta Şampiyonluk Tahminleri</h3>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
@@ -72,3 +76,6 @@
     </p-table>
   </div>
 </div>
+
+<button class="mt-5" (click)="playAllMatches()">Tüm Maçları Oynat</button>
+<app-all-match-results *ngIf="showMatchResults"></app-all-match-results>

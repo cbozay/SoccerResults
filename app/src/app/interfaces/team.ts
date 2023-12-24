@@ -6,4 +6,5 @@ export interface Team {
   draws: number;
   losses: number;
   goalDifference: number;
+  power: number;
 }

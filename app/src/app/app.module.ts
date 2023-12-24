@@ -10,6 +10,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorModule } from 'primeng/paginator';
 import { ComponentsModule } from './components/components.module';
 import { matchResultsReducer } from './store/reducers/matchResults.reducer';
+import { allMatchResultsReducer } from './store/reducers/allMatchResults.reducer';
+import { championshipProbabilitiesReducer } from './store/reducers/championshipProbabilities.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +19,6 @@ import { matchResultsReducer } from './store/reducers/matchResults.reducer';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
     TableModule,
     PaginatorModule,
     ButtonModule,
@@ -25,6 +26,8 @@ import { matchResultsReducer } from './store/reducers/matchResults.reducer';
     ComponentsModule,
     StoreModule.forRoot({
       matchResults: matchResultsReducer,
+      allMatchResults: allMatchResultsReducer,
+      championshipProbabilities: championshipProbabilitiesReducer,
     }),
   ],
   providers: [],

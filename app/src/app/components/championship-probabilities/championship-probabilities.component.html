@@ -1,0 +1,27 @@
+<div>
+  <p-table
+    styleClass="p-datatable-striped"
+    [value]="championshipProbabilities"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+    <ng-template pTemplate="caption">
+      <div class="d-flex justify-content-center">
+        <h2>Şampiyonluk Olasılıkları</h2>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr class="border bg-light">
+        <th>Takım Adı</th>
+        <th class="probabilities">Şampiyonluk Olasılığı</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-teamProbability>
+      <tr>
+        <td>{{ teamProbability.team.name }}</td>
+        <td class="probabilities">{{ teamProbability.probability }}%</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

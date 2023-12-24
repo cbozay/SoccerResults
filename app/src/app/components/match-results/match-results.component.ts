@@ -18,7 +18,7 @@ export class MatchResultsComponent implements OnInit {
     this.store.pipe(select('matchResults')).subscribe((results) => {
       // Seçilen veriyi matchResults değişkenine ata
       this.matchResults = results;
-      console.log(this.matchResults);
+      // console.log(this.matchResults);
 
       this.week = this.matchResults.at(0)?.week;
     });

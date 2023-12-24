@@ -1,0 +1,34 @@
+<div class="d-flex flex-column">
+  <div class="w-50">
+    <p-table
+      [value]="allMatchResults"
+      [paginator]="true"
+      [rows]="10"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="caption">
+        <div class="d-flex justify-content-center">
+          <h2>Tüm Maçların Sonuçları</h2>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr class="bg-light">
+          <th>Hafta</th>
+          <th>Ev Sahibi</th>
+          <th class="text-center">Skor</th>
+          <th class="probabilities">Deplasman</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-weekMatches>
+        <tr *ngFor="let match of weekMatches">
+          <td>{{ match.week }}</td>
+          <td>{{ match.home.name }}</td>
+          <td class="text-center">
+            {{ match.home.score }} - {{ match.away.score }}
+          </td>
+          <td class="probabilities">{{ match.away.name }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
