@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-match-results',
@@ -10,17 +11,17 @@ export class MatchResultsComponent implements OnInit {
   /**
    *
    */
-  matchResults: any[] = [];
+  matchResults$: Observable<any[]>;
   week: number;
   constructor(private store: Store<{ matchResults: any[] }>) {}
 
   ngOnInit() {
-    this.store.pipe(select('matchResults')).subscribe((results) => {
-      // Seçilen veriyi matchResults değişkenine ata
-      this.matchResults = results;
-      // console.log(this.matchResults);
+    this.matchResults$ = this.store.pipe(select('matchResults'));
 
-      this.week = this.matchResults.at(0)?.week;
+    this.matchResults$.subscribe((results) => {
+      if (results.length > 0) {
+        this.week = results[0]?.week;
+      }
     });
   }
 }

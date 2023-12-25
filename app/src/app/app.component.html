@@ -2,7 +2,7 @@
   <div>
     <p-table
       styleClass="p-datatable-striped"
-      [value]="teams"
+      [value]="teams$.getValue()"
       [paginator]="true"
       [rows]="5"
       [rowsPerPageOptions]="[5, 10, 20]"
@@ -39,7 +39,11 @@
       </ng-template>
     </p-table>
 
-    <button (click)="simulateMatches()">Maçları Oyna</button>
+    <div class="m-3">
+      <p-button (click)="simulateMatches()" [disabled]="isPlaying"
+        >Maçları Oynat</p-button
+      >
+    </div>
   </div>
 
   <app-match-results></app-match-results>
@@ -77,5 +81,9 @@
   </div>
 </div>
 
-<button class="mt-5" (click)="playAllMatches()">Tüm Maçları Oynat</button>
+<div class="m-3">
+  <p-button (click)="playAllMatches()" [disabled]="isPlaying"
+    >Tüm Maçları Oynat</p-button
+  >
+</div>
 <app-all-match-results *ngIf="showMatchResults"></app-all-match-results>

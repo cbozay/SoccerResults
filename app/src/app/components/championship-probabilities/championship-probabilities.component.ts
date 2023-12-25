@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
 import { Team } from 'src/app/interfaces/team';
 
 @Component({
@@ -11,19 +12,15 @@ export class ChampionshipProbabilitiesComponent implements OnInit {
   /**
    *
    */
-  championshipProbabilities: { team: Team; probability: number }[] = [];
+  championshipProbabilities$: Observable<{ team: Team; probability: number }[]>;
   constructor(
     private store: Store<{
       championshipProbabilities: { team: Team; probability: number }[];
     }>
   ) {}
   ngOnInit() {
-    this.store
-      .pipe(select('championshipProbabilities'))
-      .subscribe((results) => {
-        // Seçilen veriyi matchResults değişkenine ata
-        this.championshipProbabilities = results;
-        console.log(this.championshipProbabilities);
-      });
+    this.championshipProbabilities$ = this.store.pipe(
+      select('championshipProbabilities')
+    );
   }
 }

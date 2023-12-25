@@ -1,7 +1,7 @@
 <div>
   <p-table
     styleClass="p-datatable-striped"
-    [value]="championshipProbabilities"
+    [value]="championshipProbabilities$ | async"
     [paginator]="true"
     [rows]="5"
     [rowsPerPageOptions]="[5, 10, 20]"

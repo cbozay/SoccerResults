@@ -4,7 +4,7 @@ import * as matchResultsAction from './store/actions/matchResults.actions';
 import * as allMatchResultsAction from './store/actions/allMatchResults.action';
 import * as championshipProbabilitiesAction from './store/actions/championshipProbabilities.action';
 import { Team } from './interfaces/team';
-declare var $: any;
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -21,51 +21,40 @@ export class AppComponent implements OnInit {
       championshipProbabilities: { team: Team; probability: number }[];
     }>
   ) {
+    this.generateTeams();
     this.generateMatches();
   }
-  teams: Team[] = [
-    {
-      name: 'Beşiktaş',
-      points: 0,
-      matchesPlayed: 0,
-      wins: 0,
-      draws: 0,
-      losses: 0,
-      goalDifference: 0,
-      power: 0,
-    },
-    {
-      name: 'Fenerbahçe',
-      points: 0,
-      matchesPlayed: 0,
-      wins: 0,
-      draws: 0,
-      losses: 0,
-      goalDifference: 0,
-      power: 0,
-    },
-    {
-      name: 'Galatasaray',
-      points: 0,
-      matchesPlayed: 0,
-      wins: 0,
-      draws: 0,
-      losses: 0,
-      goalDifference: 0,
-      power: 0,
-    },
-    {
-      name: 'Elazığspor',
-      points: 0,
-      matchesPlayed: 0,
-      wins: 0,
-      draws: 0,
-      losses: 0,
-      goalDifference: 0,
-      power: 0,
-    },
-  ];
 
+  //********************************** */
+
+  // Generating Teams start
+  teams$: BehaviorSubject<Team[]> = new BehaviorSubject<Team[]>([]);
+
+  generateTeams() {
+    const teamNames: string[] = [
+      'Beşiktaş',
+      'Fenerbahçe',
+      'Galatasaray',
+      'Elazığspor',
+    ];
+    const teams = teamNames.map((name, index) => ({
+      id: index + 1,
+      name,
+      points: 0,
+      matchesPlayed: 0,
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      goalDifference: 0,
+      power: 0,
+    }));
+    this.teams$.next(teams);
+  }
+  // Generating Teams end
+
+  //********************************** */
+
+  // Generating matchSchedule start
   matchSchedule: [Team, Team][][] = [];
   currentWeekIndex = 0;
 
@@ -73,12 +62,12 @@ export class AppComponent implements OnInit {
     // her takıma rastgele güçler atanır
     const powerValues = [1, 2, 3, 4, 5]; // Güç değerleri
 
-    for (let i = 0; i < this.teams.length; i++) {
-      this.teams[i].power =
+    for (let i = 0; i < this.teams$.getValue().length; i++) {
+      this.teams$.getValue()[i].power =
         powerValues[Math.floor(Math.random() * powerValues.length)];
     }
 
-    const weeks = this.teams.length - 1;
+    const weeks = this.teams$.getValue().length - 1;
     const firstHalfMatches: [Team, Team][][] = [];
     const secondHalfMatches: [Team, Team][][] = [];
 
@@ -86,11 +75,14 @@ export class AppComponent implements OnInit {
     for (let week = 0; week < weeks; week++) {
       const matches: [Team, Team][] = [];
 
-      for (let i = 0; i < this.teams.length / 2; i++) {
-        matches.push([this.teams[i], this.teams[this.teams.length - 1 - i]]);
+      for (let i = 0; i < this.teams$.getValue().length / 2; i++) {
+        matches.push([
+          this.teams$.getValue()[i],
+          this.teams$.getValue()[this.teams$.getValue().length - 1 - i],
+        ]);
       }
 
-      this.teams.splice(1, 0, this.teams.pop() as Team);
+      this.teams$.getValue().splice(1, 0, this.teams$.getValue().pop() as Team);
       firstHalfMatches.push(matches);
     }
 
@@ -122,7 +114,11 @@ export class AppComponent implements OnInit {
     }
     return arr;
   }
+  // Generating matchSchedule end
 
+  //********************************** */
+
+  // playing matches start
   currentWeekMatchResults: any[] = [];
   championshipProbabilities: { team: Team; probability: number }[] = [];
 
@@ -198,30 +194,33 @@ export class AppComponent implements OnInit {
 
   calculateChampionshipProbabilities() {
     const remainingWeeks = this.matchSchedule.length - this.currentWeekIndex;
-    const topTeamPoints = this.teams[0].points;
+    const topTeamPoints = this.teams$.getValue()[0].points;
 
-    const totalPointsExceptTopTeam = this.teams
+    const totalPointsExceptTopTeam = this.teams$
+      .getValue()
       .slice(1)
       .reduce((total, t) => total + t.points, 0);
 
-    this.championshipProbabilities = this.teams.map((team, index) => {
-      if (index !== 0) {
-        const potentialPoints = team.points + remainingWeeks * 3;
-        if (potentialPoints >= topTeamPoints) {
-          const remainingProbability =
-            100 - (topTeamPoints / totalPointsExceptTopTeam) * 100;
-          const probability = Math.max(
-            0,
-            (team.points / totalPointsExceptTopTeam) * remainingProbability
-          );
-          return { team, probability };
+    this.championshipProbabilities = this.teams$
+      .getValue()
+      .map((team, index) => {
+        if (index !== 0) {
+          const potentialPoints = team.points + remainingWeeks * 3;
+          if (potentialPoints >= topTeamPoints) {
+            const remainingProbability =
+              100 - (topTeamPoints / totalPointsExceptTopTeam) * 100;
+            const probability = Math.max(
+              0,
+              (team.points / totalPointsExceptTopTeam) * remainingProbability
+            );
+            return { team, probability };
+          } else {
+            return { team, probability: 0 };
+          }
         } else {
           return { team, probability: 0 };
         }
-      } else {
-        return { team, probability: 0 };
-      }
-    });
+      });
 
     // En üstteki takımın olasılığını düzenle
     const topTeamProbability =
@@ -239,9 +238,14 @@ export class AppComponent implements OnInit {
       (a, b) => b.probability - a.probability
     );
   }
+  // playing matches end
+
+  //********************************** */
 
   updateTable() {
-    this.teams.sort((a, b) => {
+    const updatedTeams = this.teams$.getValue().slice(); // Mevcut değeri alıyoruz
+
+    updatedTeams.sort((a, b) => {
       if (b.points !== a.points) {
         return b.points - a.points; // Puanlara göre sırala
       } else if (b.goalDifference !== a.goalDifference) {
@@ -251,7 +255,7 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.teams = [...this.teams];
+    this.teams$.next(updatedTeams); // Sıralanmış yeni değeri next metoduyla yayınlıyoruz
 
     this.matchResultsStore.dispatch(
       matchResultsAction.sendMatchResults({
@@ -263,7 +267,10 @@ export class AppComponent implements OnInit {
   isLowProbability(team: Team, index: number): boolean {
     // Takımın puan durumunu ve kalan hafta sayısını alalım
     const remainingWeeks = this.matchSchedule.length - this.currentWeekIndex;
-    const sortedTeams = this.teams.slice().sort((a, b) => b.points - a.points);
+    const sortedTeams = this.teams$
+      .getValue()
+      .slice()
+      .sort((a, b) => b.points - a.points);
     const currentTeam = sortedTeams[index];
     const topTeamPoints = sortedTeams[0].points;
 
@@ -276,9 +283,12 @@ export class AppComponent implements OnInit {
 
   allMatchResults: any[] = [];
   showMatchResults = false;
+  isPlaying: boolean = false; // Başlangıçta butonun etkin olduğu durumu varsayalım
 
   playAllMatches() {
     this.allMatchResults = [];
+
+    this.isPlaying = true; // Butona tıklandığında butonu devre dışı bırak
 
     while (this.currentWeekIndex < this.matchSchedule.length) {
       const matches = this.matchSchedule[this.currentWeekIndex];
