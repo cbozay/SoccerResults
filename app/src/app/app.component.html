@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-center"><h2>Puan Durumu</h2></div>
       </ng-template>
       <ng-template pTemplate="header">
-        <tr class="border">
+        <tr class="">
           <th>Takım Adı</th>
           <th>Puan</th>
           <th>Oynanan Maç</th>
@@ -48,11 +48,9 @@
 
   <app-match-results></app-match-results>
 
-  <!-- <app-championship-probabilities
-    *ngIf="currentWeekIndex > 3"
-  ></app-championship-probabilities> -->
+  <!-- <app-championship-probabilities *ngIf="currentWeekIndex > 3"></app-championship-probabilities> -->
 
-  <div *ngIf="currentWeekIndex > 3">
+  <div style="width: 400px" *ngIf="currentWeekIndex > 3">
     <p-table
       styleClass="p-datatable-striped"
       [value]="championshipProbabilities"
@@ -61,12 +59,12 @@
       [rowsPerPageOptions]="[5, 10, 20]"
     >
       <ng-template pTemplate="caption">
-        <div class="d-flex justify-content-center mb-1">
-          <h3>{{ currentWeekIndex }}. Hafta Şampiyonluk Tahminleri</h3>
+        <div class="d-flex justify-content-center mb-2">
+          <h4>{{ currentWeekIndex }}. Hafta Şampiyonluk Tahminleri</h4>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
-        <tr class="border bg-light">
+        <tr class="bg-light">
           <th>Takım Adı</th>
           <th class="probabilities">Şampiyonluk Olasılığı</th>
         </tr>

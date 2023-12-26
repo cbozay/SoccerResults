@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as matchResultsAction from './store/actions/matchResults.actions';
 import * as allMatchResultsAction from './store/actions/allMatchResults.action';
 import * as championshipProbabilitiesAction from './store/actions/championshipProbabilities.action';
 import { Team } from './interfaces/team';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +19,21 @@ export class AppComponent implements OnInit {
     private matchResultsStore: Store<{ matchResults: any[] }>,
     private championshipProbabilitiesStore: Store<{
       championshipProbabilities: { team: Team; probability: number }[];
-    }>
+    }>,
+    private newScoreStore: Store<{ newScore: any }>
   ) {
     this.generateTeams();
     this.generateMatches();
+
+    this.newScoreStore
+      .pipe(select('newScore'))
+      .subscribe((value) => (this.newScore = value));
+    // console.log(this.newScore ?? {});
   }
 
   //********************************** */
+
+  newScore: any;
 
   // Generating Teams start
   teams$: BehaviorSubject<Team[]> = new BehaviorSubject<Team[]>([]);

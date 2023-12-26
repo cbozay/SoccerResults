@@ -1,3 +1,30 @@
+$primary-color: #3498db;
+
+// Başlık stili
+h4,
+h2 {
+  color: $primary-color; // Başlık rengi
+  margin-bottom: 20px; // Alt boşluk
+}
+
+// Buton stili
+p-button {
+  padding: 10px 20px; // Buton iç boşluğu
+  border: none; // Kenarlık yok
+  border-radius: 5px; // Köşe yuvarlama
+  background-color: $primary-color; // Buton arka plan rengi
+  color: white; // Buton yazı rengi
+  transition: 0.3s ease-in-out;
+
+  &:hover {
+    background-color: darken(
+      $primary-color,
+      10%
+    ); // Hover durumunda biraz daha koyu renk
+    cursor: pointer;
+  }
+}
+
 .probabilities {
   float: right;
 }

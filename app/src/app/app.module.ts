@@ -12,6 +12,7 @@ import { ComponentsModule } from './components/components.module';
 import { matchResultsReducer } from './store/reducers/matchResults.reducer';
 import { allMatchResultsReducer } from './store/reducers/allMatchResults.reducer';
 import { championshipProbabilitiesReducer } from './store/reducers/championshipProbabilities.reducer';
+import { newscoreReducer } from './store/reducers/newScore.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { championshipProbabilitiesReducer } from './store/reducers/championshipP
       matchResults: matchResultsReducer,
       allMatchResults: allMatchResultsReducer,
       championshipProbabilities: championshipProbabilitiesReducer,
+      newscore: newscoreReducer,
     }),
   ],
   providers: [],

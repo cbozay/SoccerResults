@@ -1,3 +1,9 @@
+$primary-color: #3498db;
+
 .probabilities {
   float: right;
+}
+
+h2 {
+  color: $primary-color; // Başlık rengi
 }
