@@ -15,7 +15,7 @@ export class MatchResultsComponent implements OnInit {
   week: number;
 
   constructor(
-    private store: Store<{ matchResults: any[] }>,
+    private store: Store<{ matchResults: any[]; newScore: any }>,
     private newScoreStore: Store<{ newScore: any }>
   ) {}
 
@@ -45,6 +45,7 @@ export class MatchResultsComponent implements OnInit {
     // Hafta sayısı, takım adları ve yeni skorları yazdırma
 
     const newScore = {
+      id: updatedMatch.id,
       week: this.week,
       home: { name: updatedMatch.home.name, score: this.homeNewScore.value },
       away: { name: updatedMatch.away.name, score: this.awayNewScore.value },

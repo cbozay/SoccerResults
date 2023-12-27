@@ -140,6 +140,8 @@ export class AppComponent implements OnInit {
 
     this.currentWeekMatchResults = [];
 
+    let matchId = 1; // Maç ID değerini başlat
+
     for (const match of matches) {
       const home = match[0];
       const away = match[1];
@@ -154,6 +156,7 @@ export class AppComponent implements OnInit {
       );
 
       this.currentWeekMatchResults.push({
+        id: matchId++, // Maç ID
         week: this.currentWeekIndex + 1, // Hafta numarası
         home: {
           name: home.name,
